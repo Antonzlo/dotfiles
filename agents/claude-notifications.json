@@ -1,0 +1,25 @@
+{
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "notify-send -- \"Claude Code: $(basename \"$PWD\")\" \"Needs your attention\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "notify-send -- \"Claude Code: $(basename \"$PWD\")\" \"Finished responding; check result\""
+          }
+        ]
+      }
+    ]
+  }
+}
