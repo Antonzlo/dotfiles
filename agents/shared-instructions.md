@@ -19,3 +19,15 @@ Reusable instruction source for Claude Code and Codex. This file is not auto-loa
 - On Linux, detect the distribution and use its appropriate package manager for system packages. Keep project dependencies within the project's dependency tooling.
 - Respect project-pinned runtime and tool versions. Avoid unrelated dependency upgrades or lockfile churn.
 - Use the project's existing formatter, linter and test commands rather than introducing a competing toolchain for routine edits.
+
+## Docker and CI builds
+
+- Choose supported runtime/base-image releases with current security patches, compatible with the project. Do not infer vulnerability status from a major version alone. Pin deliberate image versions or digests for reproducibility and keep an explicit update process; do not use floating latest as a security policy.
+- Keep the build context small with .dockerignore. Copy only required files; exclude credentials, local environment files, VCS metadata and irrelevant artifacts. Use multi-stage builds where appropriate so the runtime image contains only runtime dependencies and output.
+- Design layer order for reuse: copy dependency manifests, lockfiles and required workspace metadata before dependency installation, then copy frequently changing source. Preserve lifecycle scripts and build inputs actually required by the project; do not disable scripts blindly.
+- Use BuildKit cache mounts for package/compiler caches where supported. Configure persistent local or external layer caches for CI, including cache import and export. External layer-cache export does not by itself guarantee cache-mount contents survive a fresh runner.
+- Reuse pnpm store and Gradle/dependency/task caches as appropriate. Respect lockfiles and key caches by relevant platform, toolchain and inputs; use only cache mechanisms that maintain correct invalidation.
+- In monorepos, build and test affected components and their dependents. Changes to shared libraries, lockfiles, generators or build configuration must invalidate the relevant work. A frontend-only change should not force unrelated backend rebuilds.
+- Check cache hit/miss behavior in logs and compare cold and warm builds before claiming an optimization. Investigate unexpected full rebuilds instead of adding unconditional clean/no-cache steps.
+- Never put secrets into image layers, build arguments or exported caches. Use build secret mounts for temporary build credentials. Do not share writable trusted build caches or signing/deployment credentials with untrusted PR jobs.
+- Cache reuse is not permission to skip checks required by the change. Completion reports should distinguish build success, tests and cache behavior.
