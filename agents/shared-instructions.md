@@ -11,3 +11,11 @@ Reusable instruction source for Claude Code and Codex. This file is not auto-loa
 - After a completed milestone, update the project's designated handoff note with the task status, branch, changed areas, checks and next step. Do not store credentials or copy full chat transcripts. This does not guarantee a checkpoint after an abrupt crash.
 - When two agents edit the same repository concurrently, use separate branches and worktrees. Worktrees separate working directories; they are not security sandboxes and do not isolate ports, databases or external services.
 - Use desktop notifications for attention and response completion where supported. Completion of a response is not proof of task success.
+
+## Package and environment preferences
+
+- For new JavaScript/TypeScript projects, prefer pnpm. In existing projects, follow repository instructions, the packageManager field and the existing lockfile. Do not migrate package managers or add a competing lockfile without an explicit task to do so.
+- On Windows, prefer winget for system application installation when a suitable package is available. Check whether the application is already installed, and verify the intended package identity before installation. Do not treat a package manager preference as authorization to upgrade unrelated software.
+- On Linux, detect the distribution and use its appropriate package manager for system packages. Keep project dependencies within the project's dependency tooling.
+- Respect project-pinned runtime and tool versions. Avoid unrelated dependency upgrades or lockfile churn.
+- Use the project's existing formatter, linter and test commands rather than introducing a competing toolchain for routine edits.
